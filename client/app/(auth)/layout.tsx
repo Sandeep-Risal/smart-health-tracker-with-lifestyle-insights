@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { QueryClient, QueryClientProvider } from "react-query";
+import AuthImg from "@/public/auth-img.svg";
 
 export default function AuthLayout({
   children,
@@ -18,8 +20,20 @@ export default function AuthLayout({
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex flex-col items-center justify-center h-screen">
-        {children}
+      <div className="grid grid-cols-2">
+        <div>
+          <Image
+            src={AuthImg}
+            alt="Auth Image"
+            className="h-full w-full object-cover"
+            width={100}
+            height={100}
+            quality={100}
+          />
+        </div>
+        <div className="flex flex-col items-center justify-center h-screen text-black w-full">
+          {children}
+        </div>
       </div>
     </QueryClientProvider>
   );

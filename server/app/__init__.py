@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from .config import Config
-from .extensions import db, jwt, migrate,swagger
+from .extensions import db, jwt, migrate,swagger, cors
 import os
 from .controllers import auth_bp, logs_bp
 
@@ -15,13 +15,17 @@ def create_app():
     jwt.init_app(app)
     migrate.init_app(app, db)
     swagger.init_app(app)  # initialize flasgger
+    cors.init_app(app, resources={
+        r"/auth/*": {"origins": "http://localhost:3000"},
+        r"/api/*": {"origins": "http://localhost:3000"},
+        r"/": {"origins": "http://localhost:3000"}
+    } , supports_credentials=True)
 
     # create tables
     with app.app_context():
         from . import models 
         db.create_all()
 
-    
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(logs_bp, url_prefix="/api")
 

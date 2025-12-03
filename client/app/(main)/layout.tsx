@@ -3,8 +3,8 @@ import { cookies } from "next/headers";
 import SidebarLayout from "@/src/shared/main-layout/sidebar/contents/provider-layout";
 
 export const metadata: Metadata = {
-  title: "TEST APP",
-  description: "TEST APP",
+  title: "Health Tracker",
+  description: "Health Tracker",
 };
 
 export default async function RootLayout({

@@ -26,7 +26,7 @@ const basicFieldsValidation = {
 };
 
 const passwordFieldsValidation = {
-  newPassword: yup
+  password: yup
     .string()
     .required("Password is required.")
     .min(5, "Password must be atleast of 5 characters")
@@ -34,12 +34,42 @@ const passwordFieldsValidation = {
   confirmPassword: yup
     .string()
     .required("Confirm Password is required.")
-    .oneOf([yup.ref("newPassword")], "Confirm password must match password."),
+    .oneOf([yup.ref("password")], "Confirm password must match password."),
 };
 
 const loginSchema = yup.object().shape({
-  username: basicFieldsValidation.username,
+  email: basicFieldsValidation.email,
   password: yup.string().required("Password is required."),
 });
 
-export { basicFieldsValidation, passwordFieldsValidation, loginSchema };
+const registerSchema = yup.object().shape({
+  first_name: yup
+    .string()
+    .required("First name is required.")
+    .max(50, "First name must not exceed 50 characters."),
+  last_name: yup
+    .string()
+    .required("Last name is required.")
+    .max(50, "Last name must not exceed 50 characters."),
+  email: basicFieldsValidation.email,
+  password: passwordFieldsValidation.password,
+  confirmPassword: passwordFieldsValidation.confirmPassword,
+  dob: yup
+    .string()
+    .required("Date of birth is required.")
+    .matches(
+      /^\d{4}-\d{2}-\d{2}$/,
+      "Date of birth must be in YYYY-MM-DD format."
+    ),
+  gender: yup
+    .string()
+    .required("Gender is required.")
+    .oneOf(["Male", "Female", "Other"], "Please select a valid gender."),
+});
+
+export {
+  basicFieldsValidation,
+  passwordFieldsValidation,
+  loginSchema,
+  registerSchema,
+};

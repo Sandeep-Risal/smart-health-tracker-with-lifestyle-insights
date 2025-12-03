@@ -27,6 +27,10 @@ import { ILoginForm } from "../../interfaces";
 import { loginSchema } from "../../schema";
 import { login } from "../../services";
 
+export interface IErrMain {
+  error: IError;
+}
+
 const LoginForm = () => {
   const router = useRouter();
   const form = useForm<ILoginForm>({
@@ -34,7 +38,7 @@ const LoginForm = () => {
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -45,12 +49,14 @@ const LoginForm = () => {
       form.reset();
       setCookie(CookieKeys.IS_LOGGED_IN, true);
       showToast(TOAST_TYPES.success, data?.data?.message);
+      setCookie(CookieKeys.ACCESS_TOKEN, data?.data?.data?.access_token);
       router.push("/");
     },
-    onError: (error: IError) => {
+    onError: (err: IErrMain) => {
+      const error = err?.error;
       if (error?.key && Array.isArray(error?.key)) {
         error?.key.forEach((key) => {
-          form.setError(key as "username" | "password", {
+          form.setError(key as "email" | "password", {
             message: error?.error,
           });
         });
@@ -71,12 +77,12 @@ const LoginForm = () => {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Username" {...field} />
+                <Input placeholder="Email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
