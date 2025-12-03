@@ -32,5 +32,8 @@ def upsert_insight(user_id:int, dt:date, text:str):
     db.session.commit()
     return ins
 
-def fetch_insights(user_id:int, limit=50):
-    return Insight.query.filter_by(user_id=user_id).order_by(Insight.date.desc()).limit(limit).all()
+def fetch_insights(user_id:int, date=None, limit=50):
+    if date:
+        return Insight.query.filter_by(user_id=user_id, date=date).order_by(Insight.date.desc()).limit(limit).all()
+    else:
+        return Insight.query.filter_by(user_id=user_id).order_by(Insight.date.desc()).limit(limit).all()
