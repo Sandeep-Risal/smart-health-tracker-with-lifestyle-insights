@@ -1,3 +1,4 @@
+"use client";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -13,12 +14,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "TEST APP",
-  description: "TEST APP",
-};
+// export const metadata: Metadata = {
+//   title: "TEST APP",
+//   description: "TEST APP",
+// };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -28,7 +29,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Toaster richColors closeButton position="top-center" />
+        <Toaster theme="light" richColors closeButton position="top-center" />
         {children}
       </body>
     </html>

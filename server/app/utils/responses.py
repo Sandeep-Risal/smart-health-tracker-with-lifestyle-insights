@@ -9,5 +9,5 @@ def api_response(success: bool, code: int, message: str = "", data=None, errors=
     if data is not None:
         body["data"] = data
     if errors is not None:
-        body["errors"] = errors
+        body["error"] = errors
     return jsonify(body), code

@@ -66,7 +66,11 @@ def register():
         return api_response(False, 400, "Invalid email address format")
 
     if User.query.filter_by(email=email).first():
-        return api_response(False, 409, "User already exists with this email")
+        return api_response(False, 409, "", 
+          errors={
+            "error": "User already exists with this email",
+            "key": ["email"]
+          })
 
     confirm_password = data.get("confirmPassword")
     if not confirm_password:
@@ -98,7 +102,7 @@ def register():
         )
         db.session.add(user)
         db.session.commit()
-        return api_response(True, 201, "User Created")
+        return api_response(True, 201, "Registration Successful")
     except Exception as e:
         db.session.rollback()
         return api_response(False, 500, "Failed to create user", errors=str(e))
@@ -136,7 +140,12 @@ def login():
 
     user = User.query.filter_by(email=email).first()
     if not user or not verify_password(user.password_hash, password):
-        return api_response(False, 401, "Invalid Credentials")
+        return api_response(False, 401, "", 
+          errors={
+            "error": "Invalid Credentials",
+            "key": ["password"]
+          }
+        )
 
     access_token = create_access_token(identity=user.user_id)
     return api_response(True, 200, "Login successful", data={"access_token": access_token})
