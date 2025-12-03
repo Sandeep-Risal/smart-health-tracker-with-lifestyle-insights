@@ -50,23 +50,20 @@ def create_or_update_log():
     payload = request.get_json() or {}
     date_str = payload.get("date")
     try:
-        if log_date < date.today():
-            raise ValueError("Date cannot be in the past")
         log_date = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else date.today()
-    except Exception:
-        return api_response(False, 400, "Invalid date format; expected YYYY-MM-DD")
+        if log_date < date.today():
+            return api_response(False, 400, "Date cannot be in the past")
+    except Exception as e:
+        print("error",e)
+        return api_response(False, 400, "Invalid date format; expected YYYY-MM-DD", errors=str(e))
 
     try:
         log = add_or_update_log(user_id, log_date, payload)
-        
-        return api_response(True, 200, "log saved", data={
-            "log_id": log.log_id,
-            "user_id": log.user_id,
-            "date": str(log.date),
-            # "log_data": updated_log
-        })
+        print("log",log.__dict__)
+        return api_response(True, 200, "Log saved successfully")
     except Exception as e:
-        return api_response(False, 500, "failed to save log", errors=str(e))
+        print("error",e)
+        return api_response(False, 500, "Failed to save log", errors=str(e))
 
 @logs_bp.route("/logs", methods=["GET"])
 @jwt_required()
@@ -127,17 +124,33 @@ def get_user_insights():
       - in: header
         name: Authorization
         required: true
+      - in: query
+        name: date
+        type: string
+        required: false
+        description: Optional date to fetch insights. Defaults to today if not provided.
+        example: "2025-12-03"
     responses:
       200:
         description: insights fetched
     """
     user_id = get_jwt_identity()
+    payload = request.get_json() or {}
+    date_str = payload.get("date")
+    print("date_str",date_str)
     try:
-        insights = fetch_insights(user_id)
-        out = [{"insight_id": i.insight_id, "date": i.date.isoformat(), "insight_text": i.insight_text} for i in insights]
-        return api_response(True, 200, "insights fetched", data=out)
+        target_date = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else date.today()
+        print("target_date",target_date)
     except Exception as e:
-        return api_response(False, 500, "failed to fetch insights", errors=str(e))
+        return api_response(False, 400, "Invalid date format; expected YYYY-MM-DD", errors=str(e))
+
+    try:
+        insights = fetch_insights(user_id, date=target_date)
+        print("insights",insights)
+        out = [{"insight_id": i.insight_id, "date": i.date.isoformat(), "insight_text": i.insight_text} for i in insights]
+        return api_response(True, 200, "Insights fetched successfully", data=out)
+    except Exception as e:
+        return api_response(False, 500, "Failed to fetch insights", errors=str(e))
 
 @logs_bp.route("/mine", methods=["POST"])
 @jwt_required()
@@ -150,13 +163,30 @@ def run_mining():
       - in: header
         name: Authorization
         required: true
+      - in: body
+        name: body
+        schema:
+          properties:
+            date:
+              type: string
+              example: "2025-12-03"
+              description: Optional date to mine. Defaults to today if not provided.
     responses:
       200:
         description: mining completed
     """
     user_id = get_jwt_identity()
+    payload = request.get_json() or {}
+    date_str = payload.get("date")
+    
     try:
-        written = mining.perform_mining_for_user(user_id)
-        return api_response(True, 200, "mining completed", data={"insights_written": len(written), "insights": written})
+        target_date = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else date.today()
     except Exception as e:
-        return api_response(False, 500, "mining failed", errors=str(e))
+        return api_response(False, 400, "Invalid date format; expected YYYY-MM-DD", errors=str(e))
+    
+    try:
+        written = perform_mining_for_user(user_id, target_date)
+        return api_response(True, 200, "Mining completed successfully", data={"insights_written": len(written), "insights": written})
+    except Exception as e:
+        return api_response(False, 500, "Mining failed", errors=str(e))
+    
