@@ -6,10 +6,13 @@ const DashboardContent = () => {
   const { profileData } = useProfileStore();
   return (
     <div>
-      Welcome!{" "}
-      <span className="font-bold">
-        {profileData.firstName} {profileData.lastName}
-      </span>
+      <p className="text-3xl">
+        {" "}
+        Welcome!{" "}
+        <span className="font-bold">
+          {profileData.first_name} {profileData.last_name}
+        </span>
+      </p>
     </div>
   );
 };

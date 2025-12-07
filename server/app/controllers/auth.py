@@ -148,4 +148,4 @@ def login():
         )
 
     access_token = create_access_token(identity=user.user_id)
-    return api_response(True, 200, "Login successful", data={"access_token": access_token})
+    return api_response(True, 200, "Login successful", data={"access_token": access_token })

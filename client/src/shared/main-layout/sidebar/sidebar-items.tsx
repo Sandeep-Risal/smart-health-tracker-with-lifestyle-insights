@@ -1,4 +1,4 @@
-import { Home, Profile2User } from "iconsax-react";
+import { Home, NoteText } from "iconsax-react";
 
 export const sidebarItems = [
   {
@@ -10,9 +10,9 @@ export const sidebarItems = [
         icon: Home,
       },
       {
-        label: "Users",
-        href: "/users",
-        icon: Profile2User,
+        label: "Logs",
+        href: "/logs",
+        icon: NoteText,
       },
     ],
   },

@@ -3,9 +3,50 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..utils.responses import api_response
 from ..services.persistance import add_or_update_log, fetch_logs, fetch_insights
 from ..services.mining import perform_mining_for_user
+from ..models import User
+
 from datetime import datetime, date
 
 logs_bp = Blueprint("logs", __name__)
+
+@logs_bp.route("/profile", methods=["GET"])
+@jwt_required()
+def get_profile():
+    """
+    Get the profile of the currently authenticated user
+    ---
+    parameters:
+      - in: header
+        name: Authorization
+        required: true
+    tags:
+      - users
+    responses:
+      200:
+        description: User profile fetched successfully
+      404:
+        description: User not found
+      500:
+        description: Server error
+    """
+    user_id = get_jwt_identity()
+    try:
+        # Lazy import to avoid circular import issues
+        user = User.query.filter_by(user_id=user_id).first()
+        if not user:
+            return api_response(False, 404, "User not found")
+
+        user_data = {
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "dob": user.dob.isoformat() if user.dob else None,
+            "gender": user.gender,
+        }
+        return api_response(True, 200, "User profile fetched successfully", data=user_data)
+    except Exception as e:
+        return api_response(False, 500, "Failed to fetch user profile", errors=str(e))
+
 
 @logs_bp.route("/logs", methods=["POST"])
 @jwt_required()

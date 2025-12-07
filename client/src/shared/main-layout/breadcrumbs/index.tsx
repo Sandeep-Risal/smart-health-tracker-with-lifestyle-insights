@@ -20,7 +20,7 @@ const PageBreadCrumbs = () => {
   const breadcrumbs = segments.filter((segment) => segment !== params?.id);
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className="mb-10">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
