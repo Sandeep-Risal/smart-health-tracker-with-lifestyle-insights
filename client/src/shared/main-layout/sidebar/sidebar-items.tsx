@@ -2,7 +2,7 @@ import { Home, NoteText } from "iconsax-react";
 
 export const sidebarItems = [
   {
-    group: "Sandeep",
+    group: "FitPulse",
     childrens: [
       {
         label: "Dashboard",
