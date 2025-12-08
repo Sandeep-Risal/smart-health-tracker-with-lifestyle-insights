@@ -231,4 +231,97 @@ def run_mining():
         return api_response(True, 200, "Mining completed successfully", data={"insights": written})
     except Exception as e:
         return api_response(False, 500, "Mining failed", errors=str(e))
+
+
+@logs_bp.route("/trends", methods=["GET"])
+@jwt_required()
+def get_trends():
+    """
+    Get trend data for dashboard graphs (Steps, Sleep Hours, Water, Average Heart Rate)
+    Returns data grouped by metric for easy graph rendering
+    ---
+    tags: [trends]
+    parameters:
+      - in: header
+        name: Authorization
+        required: true
+      - name: start
+        in: query
+        type: string
+        required: false
+        description: Start date for trend data (YYYY-MM-DD). If not provided, returns all logs.
+        example: "2025-01-01"
+      - name: end
+        in: query
+        type: string
+        required: false
+        description: End date for trend data (YYYY-MM-DD). If not provided, returns all logs.
+        example: "2025-12-31"
+    responses:
+      200:
+        description: Trend data fetched successfully
+      400:
+        description: Invalid date parameter
+      500:
+        description: Server error
+    """
+    user_id = get_jwt_identity()
+    start = request.args.get("start")
+    end = request.args.get("end")
     
+    try:
+        start_date = datetime.strptime(start, "%Y-%m-%d").date() if start else None
+        end_date = datetime.strptime(end, "%Y-%m-%d").date() if end else None
+    except Exception:
+        return api_response(False, 400, "Invalid date parameter; expected YYYY-MM-DD")
+
+    try:
+        logs = fetch_logs(user_id, start_date, end_date)
+        
+        # Sort logs by date ascending (oldest first) for proper graph display
+        logs_sorted = sorted(logs, key=lambda x: x.date)
+        
+        # Initialize arrays for each metric
+        steps_data = []
+        water_data = []
+        sleep_hours_data = []
+        avg_heart_rate_data = []
+        
+        # Populate each metric array
+        for log in logs_sorted:
+            date_str = log.date.isoformat()
+            
+            if log.steps is not None:
+                steps_data.append({
+                    "date": date_str,
+                    "step": log.steps
+                })
+            
+            if log.water_liters is not None:
+                water_data.append({
+                    "date": date_str,
+                    "amount": log.water_liters
+                })
+            
+            if log.sleep_hours is not None:
+                sleep_hours_data.append({
+                    "date": date_str,
+                    "hours": log.sleep_hours
+                })
+            
+            if log.avg_heart_rate is not None:
+                avg_heart_rate_data.append({
+                    "date": date_str,
+                    "rate": log.avg_heart_rate
+                })
+        
+        trends_data = {
+            "steps": steps_data,
+            "water": water_data,
+            "sleep_hours": sleep_hours_data,
+            "avg_heart_rate": avg_heart_rate_data
+        }
+        
+        return api_response(True, 200, "Trend data fetched successfully", data=trends_data)
+    except Exception as e:
+        return api_response(False, 500, "Failed to fetch trend data", errors=str(e))
