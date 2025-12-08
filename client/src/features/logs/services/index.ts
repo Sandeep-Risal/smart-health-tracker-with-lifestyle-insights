@@ -21,7 +21,11 @@ const mineLog = (data: IMinePayload) => {
 };
 
 const getInsights = (date?: string) => {
-  return httpRequest("/api/insights", HttpMethods.GET);
+  return httpRequest("/api/insights", HttpMethods.GET, {
+    params: {
+      date,
+    },
+  });
 };
 
 export { getLogs, createLog, mineLog, getInsights };

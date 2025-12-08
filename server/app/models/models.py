@@ -40,4 +40,5 @@ class Insight(db.Model):
     user_id = db.Column(db.String(20), db.ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False, index=True)
     date = db.Column(db.Date, nullable=False)
     insight_text = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(10), nullable=False, default="neutral")  # "good", "bad", or "neutral"
     created_at = db.Column(db.Date, server_default=db.func.current_date(), nullable=False)

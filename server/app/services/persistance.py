@@ -22,12 +22,13 @@ def fetch_logs(user_id:int, start_date=None, end_date=None):
         q = q.filter(DailyLog.date <= end_date)
     return q.order_by(DailyLog.date.desc()).all()
 
-def upsert_insight(user_id:int, dt:date, text:str):
+def upsert_insight(user_id:int, dt:date, text:str, status:str = "neutral"):
     ins = Insight.query.filter_by(user_id=user_id, date=dt).first()
     if ins:
         ins.insight_text = text
+        ins.status = status
     else:
-        ins = Insight(user_id=user_id, date=dt, insight_text=text)
+        ins = Insight(user_id=user_id, date=dt, insight_text=text, status=status)
     db.session.add(ins)
     db.session.commit()
     return ins

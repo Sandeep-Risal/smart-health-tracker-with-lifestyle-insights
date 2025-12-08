@@ -25,7 +25,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { IAddLogForm } from "../../interfaces/add-log-interface";
 import { addLogSchema } from "../../schema";
-import { createLog } from "../../services";
+import { createLog, mineLog } from "../../services";
 
 export interface IErrMain {
   error: IError;
@@ -56,7 +56,7 @@ const AddLogsForm = () => {
         TOAST_TYPES.success,
         data?.data?.message || "Log saved successfully!"
       );
-      router.back();
+      minefn();
     },
     onError: (err: IErrMain) => {
       const error = err?.error;
@@ -84,6 +84,19 @@ const AddLogsForm = () => {
       energy_level: Number(data.energy_level),
     };
     createLogMutation.mutate(payload);
+  };
+
+  //   Mine after log saved
+  const mine = useMutation({
+    mutationFn: mineLog,
+    onSuccess: () => {
+      router.push(`/logs?date=${form.getValues("date")}`);
+    },
+  });
+
+  const minefn = () => {
+    const payload = { date: form.getValues("date") };
+    mine.mutate(payload);
   };
 
   return (
@@ -248,8 +261,8 @@ const AddLogsForm = () => {
 
         <Button
           type="submit"
-          loading={createLogMutation.isLoading}
-          disabled={createLogMutation.isLoading}
+          loading={createLogMutation.isLoading || mine.isLoading}
+          disabled={createLogMutation.isLoading || mine.isLoading}
         >
           Save Log
         </Button>

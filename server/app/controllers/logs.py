@@ -176,19 +176,20 @@ def get_user_insights():
         description: insights fetched
     """
     user_id = get_jwt_identity()
-    payload = request.get_json() or {}
-    date_str = payload.get("date")
-    print("date_str",date_str)
+    date_str = request.args.get("date")
     try:
         target_date = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else date.today()
-        print("target_date",target_date)
     except Exception as e:
         return api_response(False, 400, "Invalid date format; expected YYYY-MM-DD", errors=str(e))
 
     try:
         insights = fetch_insights(user_id, date=target_date)
-        print("insights",insights)
-        out = [{"insight_id": i.insight_id, "date": i.date.isoformat(), "insight_text": i.insight_text} for i in insights]
+        out = [{
+            "insight_id": i.insight_id, 
+            "date": i.date.isoformat(), 
+            "insight_text": i.insight_text,
+            "status": i.status if hasattr(i, 'status') else "neutral"
+        } for i in insights]
         return api_response(True, 200, "Insights fetched successfully", data=out)
     except Exception as e:
         return api_response(False, 500, "Failed to fetch insights", errors=str(e))
@@ -227,7 +228,7 @@ def run_mining():
     
     try:
         written = perform_mining_for_user(user_id, target_date)
-        return api_response(True, 200, "Mining completed successfully", data={"insights_written": len(written), "insights": written})
+        return api_response(True, 200, "Mining completed successfully", data={"insights": written})
     except Exception as e:
         return api_response(False, 500, "Mining failed", errors=str(e))
     
