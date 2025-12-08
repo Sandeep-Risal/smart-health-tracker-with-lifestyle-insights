@@ -14,6 +14,7 @@ import useDashboard from "@/src/hooks/dashboard/useDashboardHook";
 import { ChartConfig, ChartContainer } from "@/src/shared/components/ui/chart";
 import { useProfileStore } from "@/src/shared/main-layout/sidebar/store/useProfile.store";
 import { Card, CardContent, CardTitle } from "@/src/shared/components/ui/card";
+import { Skeleton } from "@/src/shared/components/ui/skeleton";
 
 const DashboardContent = () => {
   const { profileData } = useProfileStore();
@@ -62,24 +63,28 @@ const DashboardContent = () => {
         <Card>
           <CardContent>
             <CardTitle className="mb-3">Steps</CardTitle>
-            <ChartContainer
-              config={stepsChartConfig}
-              className="min-h-[200px] w-full"
-            >
-              <LineChart accessibilityLayer data={trendData?.steps}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis width={100} />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="step"
-                  stroke="#8884d8"
-                  isAnimationActive={true}
-                />
-              </LineChart>
-            </ChartContainer>
+            {isLoading ? (
+              <Skeleton className="w-full h-[300px]" />
+            ) : (
+              <ChartContainer
+                config={stepsChartConfig}
+                className="min-h-[200px] w-full"
+              >
+                <LineChart accessibilityLayer data={trendData?.steps}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis width={100} />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="step"
+                    stroke="#8884d8"
+                    isAnimationActive={true}
+                  />
+                </LineChart>
+              </ChartContainer>
+            )}
           </CardContent>
         </Card>
 
@@ -87,24 +92,28 @@ const DashboardContent = () => {
         <Card>
           <CardContent>
             <CardTitle className="mb-3">Sleep</CardTitle>
-            <ChartContainer
-              config={sleepChartConfig}
-              className="min-h-[200px] w-full"
-            >
-              <LineChart accessibilityLayer data={trendData?.sleep_hours}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis width={100} />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="hours"
-                  stroke="#6EE7B7"
-                  isAnimationActive={true}
-                />
-              </LineChart>
-            </ChartContainer>
+            {isLoading ? (
+              <Skeleton className="w-full h-[300px]" />
+            ) : (
+              <ChartContainer
+                config={sleepChartConfig}
+                className="min-h-[200px] w-full"
+              >
+                <LineChart accessibilityLayer data={trendData?.sleep_hours}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis width={100} />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="hours"
+                    stroke="#6EE7B7"
+                    isAnimationActive={true}
+                  />
+                </LineChart>
+              </ChartContainer>
+            )}
           </CardContent>
         </Card>
 
@@ -112,24 +121,28 @@ const DashboardContent = () => {
         <Card>
           <CardContent>
             <CardTitle className="mb-3">Water (in liters)</CardTitle>
-            <ChartContainer
-              config={waterChartConfig}
-              className="min-h-[200px] w-full"
-            >
-              <LineChart accessibilityLayer data={trendData?.water}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis width={100} />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="amount"
-                  stroke="#60A5FA"
-                  isAnimationActive={true}
-                />
-              </LineChart>
-            </ChartContainer>
+            {isLoading ? (
+              <Skeleton className="w-full h-[300px]" />
+            ) : (
+              <ChartContainer
+                config={waterChartConfig}
+                className="min-h-[200px] w-full"
+              >
+                <LineChart accessibilityLayer data={trendData?.water}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis width={100} />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="amount"
+                    stroke="#60A5FA"
+                    isAnimationActive={true}
+                  />
+                </LineChart>
+              </ChartContainer>
+            )}
           </CardContent>
         </Card>
 
@@ -137,24 +150,28 @@ const DashboardContent = () => {
         <Card>
           <CardContent>
             <CardTitle className="mb-3">Avg. Heart Rate</CardTitle>
-            <ChartContainer
-              config={heartChartConfig}
-              className="min-h-[200px] w-full"
-            >
-              <LineChart accessibilityLayer data={trendData?.avg_heart_rate}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis width={100} />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="rate"
-                  stroke="#F7B267"
-                  isAnimationActive={true}
-                />
-              </LineChart>
-            </ChartContainer>
+            {isLoading ? (
+              <Skeleton className="w-full h-[300px]" />
+            ) : (
+              <ChartContainer
+                config={heartChartConfig}
+                className="min-h-[200px] w-full"
+              >
+                <LineChart accessibilityLayer data={trendData?.avg_heart_rate}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis width={100} />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="rate"
+                    stroke="#F7B267"
+                    isAnimationActive={true}
+                  />
+                </LineChart>
+              </ChartContainer>
+            )}
           </CardContent>
         </Card>
       </div>
