@@ -32,6 +32,14 @@ export default function AuthLayout({
           />
         </div>
         <div className="flex flex-col items-center justify-center h-screen text-black w-full">
+          {/* <Image
+            src={Logo}
+            alt="Logo"
+            className="size-40"
+            width={100}
+            height={100}
+            quality={100}
+          /> */}
           {children}
         </div>
       </div>

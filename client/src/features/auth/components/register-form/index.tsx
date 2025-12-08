@@ -80,7 +80,6 @@ const RegisterForm = () => {
   });
 
   const onSubmit: SubmitHandler<IRegisterForm> = (data) => {
-    // console.log("data", data);
     registerMutation.mutate(data);
   };
 

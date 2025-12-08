@@ -12,7 +12,7 @@ const register = (data: IRegisterForm) => {
 };
 
 const getProfile = () => {
-  return httpRequest("/profile", HttpMethods.GET);
+  return httpRequest("/api/profile", HttpMethods.GET);
 };
 
 const logout = () => {

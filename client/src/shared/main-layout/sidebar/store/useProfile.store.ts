@@ -4,9 +4,11 @@ interface IProfileData {
   //   image: string;
   id: string;
   username: string;
+  dob: string;
+  gender: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
 }
 
 interface IProfileStore {
@@ -19,8 +21,10 @@ export const useProfileStore = create<IProfileStore>((set) => ({
     id: "",
     username: "",
     email: "",
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
+    dob:"",
+    gender:""
   },
   setProfileData: (data: IProfileData) => {
     set(() => ({ profileData: data }));

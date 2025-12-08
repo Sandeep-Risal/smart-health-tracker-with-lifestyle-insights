@@ -60,7 +60,7 @@ const AppSidebarFooter = () => {
             <DropdownMenuTrigger asChild className="h-full">
               <SidebarMenuButton className="focus-visible:ring-0 group-data-[collapsible=icon]:p-0!">
                 <UserInfo
-                  name={`${profileData?.firstName} ${profileData?.lastName}`}
+                  name={`${profileData?.first_name} ${profileData?.last_name}`}
                   email={profileData?.email}
                   image="https://github.com/shadcn.png"
                 />
@@ -74,7 +74,7 @@ const AppSidebarFooter = () => {
             >
               <DropdownMenuItem>
                 <UserInfo
-                  name={`${profileData?.firstName} ${profileData?.lastName}`}
+                  name={`${profileData?.first_name} ${profileData?.last_name}`}
                   email={profileData?.email}
                   image="https://github.com/shadcn.png"
                 />

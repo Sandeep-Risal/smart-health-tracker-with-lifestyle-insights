@@ -7,6 +7,7 @@ import { CookieKeys, HttpMethods } from "@/src/enums";
 import { clearCookie } from "@/src/shared/lib/utils";
 import { toast } from "sonner";
 import { constants } from "../constants";
+import { getAccessToken } from "../shared/lib/cookie-utils";
 
 const { api } = appConfig;
 // const { SESSION_EXPIRED, TIMEOUT } = constants.messages;
@@ -57,6 +58,15 @@ createAuthRefreshInterceptor(axiosInstance, refreshAuthLogic, {
   },
 });
 
+const setAuthorizationHeader = () => {
+  const token = getAccessToken();
+  if (token) {
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete axiosInstance.defaults.headers.common["Authorization"];
+  }
+};
+
 const httpRequest = async (
   url: string,
   method: HttpMethods,
@@ -65,6 +75,7 @@ const httpRequest = async (
     "Content-Type": "application/json",
   }
 ) => {
+  setAuthorizationHeader();
   try {
     const response = await axiosInstance[method](`${url}`, data, {
       headers,

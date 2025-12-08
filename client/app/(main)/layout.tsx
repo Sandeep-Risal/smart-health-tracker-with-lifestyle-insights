@@ -3,8 +3,8 @@ import { cookies } from "next/headers";
 import SidebarLayout from "@/src/shared/main-layout/sidebar/contents/provider-layout";
 
 export const metadata: Metadata = {
-  title: "Health Tracker",
-  description: "Health Tracker",
+  title: "FitPulse",
+  description: "FitPulse",
 };
 
 export default async function RootLayout({
