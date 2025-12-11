@@ -1,6 +1,6 @@
 # FitPulse: Health Tracker Application
 
-This repository contains a full-stack application built with a Python FastAPI server (backend) and a Next.js (React) client (frontend). The app enables users to track various health metrics such as steps, water intake, sleep hours, and heart rate, with powerful trend visualizations on the dashboard.
+This repository contains a full-stack application built with a Python Flask server (backend) and a Next.js (React) client (frontend). The app enables users to track various health metrics such as steps, water intake, sleep hours, and heart rate, with powerful trend visualizations on the dashboard.
 
 ---
 
@@ -40,7 +40,7 @@ This repository contains a full-stack application built with a Python FastAPI se
 
 ## 🐍 Server (Backend)
 
-- **Framework:** FastAPI (Python)
+- **Framework:** Flask (Python)
 - **Folder:** `server/`
 - The backend handles user authentication, stores and retrieves wellness logs, and exposes an API for the frontend.
 
@@ -83,7 +83,7 @@ This repository contains a full-stack application built with a Python FastAPI se
 
    After editing or creating the `.env` file, be sure to restart the backend server.
 
-4. **Run the FastAPI server:**
+4. **Run the Flask server:**
 
    ```
    python run.py
@@ -99,7 +99,7 @@ This repository contains a full-stack application built with a Python FastAPI se
 
 ```
 client/   // Frontend: Next.js app
-server/   // Backend: FastAPI app
+server/   // Backend: Flask app
 ```
 
 ---
